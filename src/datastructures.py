@@ -18,7 +18,7 @@ class FamilyStructure:
     def _generateId(self):
         id = None
         def id_exists(id):
-            return len([member for member in self._members if member.id == id]) > 0
+            return len([member for member in self._members if member["id"] == id]) > 0
 
         while id == None or id_exists(id):
             id = randint(0, 99999999)
@@ -36,15 +36,19 @@ class FamilyStructure:
 
     # Deletes the member with the given id
     def delete_member(self, id):
-        self._members = [member for member in self._members if member.id != id]
+        self._members = [member for member in self._members if member["id"] != id]
 
-    # Returns the member with the given id
+    # Returns the member with the given id or None
     def get_member(self, id):
-        return next[
-            # We find the member with the given id
-            [member for member in self._members if member.id == id],
-            # We set None as default to return it if no member is found
-            None]
+        member = None
+
+        # We find the member with the given id
+        try:
+            member = [member for member in self._members if member["id"] == id][0]
+        except IndexError:
+            pass
+
+        return member
 
     # Returns a list of all family members
     def get_all_members(self):
