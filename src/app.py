@@ -31,11 +31,20 @@ def sitemap():
 
 @app.route('/members', methods=['GET', 'POST'])
 def members():
-    members = jackson_family.get_all_members()
+    if request.method == "GET":
+        members = jackson_family.get_all_members()
 
-    response_body = members
+        response_body = members
 
-    return jsonify(response_body), 200
+        return jsonify(response_body), 200
+
+    if request.method == "POST":
+        member = request.json
+
+        jackson_family.add_member(member)
+
+        #TODO
+
 
 @app.route('/members/<int:id>', methods=['GET'])
 def member(id):
