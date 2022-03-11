@@ -14,8 +14,9 @@ class FamilyStructure:
 
         self._members = []
 
-    # Generate unique random members ID's
+
     def _generateId(self):
+        "Generate unique random members ID's"        
         id = None
         def id_exists(id):
             return len([member for member in self._members if member["id"] == id]) > 0
@@ -25,21 +26,23 @@ class FamilyStructure:
 
         return randint(0, 99999999)
 
-    #  Adds a new member to the family
-    #  Assumes member has name (Str), age (Int), lucky_numbers ([Int])
     def add_member(self, member):
+        """
+        Adds a new member to the family
+        Assumes member has name (Str), age (Int), lucky_numbers ([Int])
+        """
         self._members.append({
             "id": self._generateId(),
             "last_name": self.last_name,
             **member,
         })
 
-    # Deletes the member with the given id
     def delete_member(self, id):
+        "Deletes the member with the given id"
         self._members = [member for member in self._members if member["id"] != id]
 
-    # Returns the member with the given id or None
     def get_member(self, id):
+        "Returns the member with the given id or None"
         member = None
 
         # We find the member with the given id
@@ -50,6 +53,6 @@ class FamilyStructure:
 
         return member
 
-    # Returns a list of all family members
     def get_all_members(self):
+        "Returns a list of all family members"
         return self._members
