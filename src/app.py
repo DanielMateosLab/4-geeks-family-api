@@ -14,7 +14,7 @@ CORS(app)
 # create the jackson family object
 jackson_family = FamilyStructure("Jackson")
 # add default members
-jackson_family.add_member({ "name": "Jhon", "age": 33, "lucky_numbers": [ 7, 13, 22 ]})
+jackson_family.add_member({ "id": 1, "name": "Jhon", "age": 33, "lucky_numbers": [ 7, 13, 22 ]})
 jackson_family.add_member({ "name": "Jane", "age": 35, "lucky_numbers": [ 10, 14, 3 ]})
 jackson_family.add_member({ "name": "Jimmy", "age": 5, "lucky_numbers": [ 1 ]})
 
@@ -50,14 +50,20 @@ def add_member():
 
         return jsonify({}), 200
 
-@app.route('/members/<int:id>', methods=['GET'])
-def get_member(id):
+@app.route('/member/<int:id>', methods=['GET', 'DELETE'])
+def get_or_delete_member(id):
     member = jackson_family.get_member(id)
 
     if member == None:
         return jsonify({ "message": "Member not found" }, 400)
 
-    return jsonify({ "member": member }), 200
+    if request.method == "GET":
+        return jsonify(member), 200
+    
+    jackson_family.delete_member(id)
+    
+    return jsonify({ "done": True })
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
