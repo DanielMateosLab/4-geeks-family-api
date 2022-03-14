@@ -28,31 +28,36 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/members', methods=['GET', 'POST'])
-def members():
-    if request.method == "GET":
-        members = jackson_family.get_all_members()
+@app.route('/members', methods=['GET'])
+def get_members():
+    members = jackson_family.get_all_members()
 
-        response_body = members
+    response_body = members
 
-        return jsonify(response_body), 200
+    return jsonify(response_body), 200
 
+@app.route('/member', methods=['POST'])
+def add_member():    
     if request.method == "POST":
         member = request.json
-
+        required_fields = ["first_name", "age", "lucky_numbers" ]
+        
+        for field in required_fields:
+            if field not in member:
+                return jsonify({ "message": f"All members must have {field!r}"}), 400 
+        
         jackson_family.add_member(member)
 
-        #TODO
-
+        return jsonify({}), 200
 
 @app.route('/members/<int:id>', methods=['GET'])
-def member(id):
+def get_member(id):
     member = jackson_family.get_member(id)
 
     if member == None:
         return jsonify({ "message": "Member not found" }, 400)
 
-    return jsonify({ "member": member }, 200)
+    return jsonify({ "member": member }), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

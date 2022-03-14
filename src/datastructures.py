@@ -32,7 +32,9 @@ class FamilyStructure:
         Assumes member has name (Str), age (Int), lucky_numbers ([Int])
         """
         self._members.append({
-            "id": self._generateId(),
+            # If there is no id we generate it
+            # Otherwise returns false and overwrite it with 
+            "id": "id" not in member and self._generateId(),
             "last_name": self.last_name,
             **member,
         })

@@ -32,6 +32,18 @@ def test_add_implementation(client):
 	})
     assert response.status_code == 200
 
+@pytest.mark.it("POST /member should return 400 if first_name is not present")
+def test_add_validation(client):
+    response = client.post('/member', json={
+        "id": 3443,
+		"age": 23,
+		"lucky_numbers": [34,65,23,4,6]
+    })
+    data = json.loads(response.data)
+
+    assert response.status_code == 400
+    assert data["message"] == "All members must have 'first_name'"
+
 @pytest.mark.it("Method POST /member should return an EMPTY response body")
 def test_add_empty_reponse_body(client):
     response = client.post('/member', json={
